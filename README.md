@@ -99,7 +99,7 @@ HOOD-SEEK/
 | [docs/hardware.md](docs/hardware.md) | HW 구성, 배선, 배치 주의사항 |
 | [docs/test-scenarios.md](docs/test-scenarios.md) | 5대 테스트 시나리오 및 평가지표 |
 | [docs/roadmap.md](docs/roadmap.md) | 개발 일정 (2026.07 ~ 2026.10, MVP 1~6) |
-| [docs/devops.md](docs/devops.md) | CI 파이프라인, pre-commit, 브랜치 전략 |
+| [docs/devops.md](docs/devops.md) | **팀원 협업 가이드(초심자용)**, CI 파이프라인, pre-commit, 브랜치 전략 |
 
 ## 팀 Ro92n
 
