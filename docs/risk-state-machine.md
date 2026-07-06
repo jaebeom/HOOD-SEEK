@@ -20,7 +20,7 @@ stateDiagram-v2
     Cooking --> AbsentConfirmed : 사용자 부재 일정 시간 지속
     AbsentConfirmed --> Cooking : 사용자 복귀
 
-    state 위험단계 {
+    state "위험 단계" as RiskStages {
         RiskLow --> RiskMedium : 부재 + PM 상승률 or 온도 상승
         RiskMedium --> RiskHigh : 과열 지속 or PM 상승률 증가
         RiskHigh --> RiskCritical : 급격한 PM 상승 + 극단적 과열
@@ -29,9 +29,9 @@ stateDiagram-v2
         RiskMedium --> RiskLow : 지표 완화
     }
 
-    Cooking --> 위험단계
-    AbsentConfirmed --> 위험단계
-    위험단계 --> Cooking : 위험 해소
+    Cooking --> RiskStages
+    AbsentConfirmed --> RiskStages
+    RiskStages --> Cooking : 위험 해소
     Cooking --> Idle : 조리 종료
 ```
 

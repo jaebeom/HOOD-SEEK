@@ -67,13 +67,15 @@ HOOD-SEEK/
 │   ├── vision/         #   사용자 존재 판단 + 반려동물·물체 ROI 탐지
 │   ├── voice/          #   ReSpeaker 제한 명령어 인식 (Vosk / Whisper.cpp / KWS)
 │   ├── fusion/         #   센서 융합 규칙 상태기계 (위험도 산출)
-│   └── comm/           #   Pi Zero·ESP32 통신 (UART 우선, heartbeat/timeout)
+│   ├── comm/           #   Pi Zero·ESP32 통신 (UART 우선, heartbeat/timeout)
+│   └── ui/             #   상태 표시·경고 UI, 로그 재생 뷰 (확장 Iteration)
 ├── pizero/             # Raspberry Pi Zero — 센서 게이트웨이
 │   ├── sps30/          #   SPS30 PM 데이터 수집·로그화
 │   └── watchdog/       #   Pi 4 동작 감시 및 fail-safe 트리거
 ├── esp32/              # ESP32 — 액추에이터 MCU (PlatformIO/Arduino)
 │   ├── src/            #   팬 PWM, 인덕션 차단 시뮬레이션, LED, 부저, fail-safe
 │   └── include/
+├── config/             # 판단 임계값·제어 정책 (매월 측정 결과로 보정)
 ├── models/             # 경량 온디바이스 모델 (YOLOv5n/YOLOv8n TFLite 등)
 ├── scripts/            # 환경 설치·실행·배포 스크립트
 └── tests/              # 테스트 시나리오 (docs/test-scenarios.md 기준)

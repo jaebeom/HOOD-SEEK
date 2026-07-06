@@ -1,0 +1,38 @@
+# HOOD&SEEK 판단 임계값 예시
+# 실측 전 초기값 — 매월 측정 결과 기반으로 보정한다 (docs/roadmap.md 참고)
+# 실사용 시 thresholds.yaml로 복사 후 수정
+
+smoke:
+  baseline_window_s: 60        # PM 기준선 산출 구간
+  moving_avg_window_s: 10      # 이동평균 구간
+  # 풍량 단계 전이 (SmokeScore 기준) — 히스테리시스: 상승/하강 임계값 분리
+  fan_low_on: 0.2
+  fan_low_off: 0.15
+  fan_mid_on: 0.5
+  fan_mid_off: 0.4
+  fan_high_on: 0.8
+  fan_high_off: 0.65
+  sustain_s: 5                 # 단계 전이 전 지속 시간
+
+thermal:
+  hotspot_temp_c: 180          # 핫스폿 판정 온도
+  overheat_temp_c: 250         # 과열 판정 최고온도
+  rise_rate_c_per_s: 2.0       # 위험 온도 상승률
+  hotspot_area_ratio: 0.15     # 핫스폿 면적 비율
+
+presence:
+  absent_confirm_s: 30         # AbsentConfirmed 판정 지속 시간
+  detect_conf: 0.5             # 사용자 탐지 confidence
+
+approach:                      # 비조리 중 위험 구역 접근 (인덕션 잠금)
+  roi_dwell_s: 2               # ROI 체류 판정 시간
+  detect_conf: 0.45
+
+risk:                          # 위험 단계 전이 조건 (docs/risk-state-machine.md)
+  medium: { absent: true, smoke_min: 0.3 }   # 또는 thermal rise 감지
+  high: { heat_sustain_s: 10, smoke_min: 0.6 }
+  critical: { smoke_min: 0.85, overheat: true }
+
+comm:
+  heartbeat_interval_ms: 500
+  esp32_cmd_timeout_ms: 2000   # 초과 시 ESP32 fail-safe 진입

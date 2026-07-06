@@ -12,6 +12,9 @@
 | `voice/` | 제한 명령어 음성 인식 | Vosk / Whisper.cpp tiny / KWS 중 안정성 높은 방식 선택 |
 | `fusion/` | 위험도 상태기계 | SmokeScore + AbsentConfirmed + HeatScore → LOW/MEDIUM/HIGH/CRITICAL (≤10ms) |
 | `comm/` | Pi Zero·ESP32 통신 | UART/Serial 우선, heartbeat + timeout |
+| `ui/` | 상태 표시·경고 UI, 로그 재생 뷰 | 확장 Iteration 단계에서 구현 (docs/roadmap.md 12~13번) |
+
+판단 임계값은 코드에 하드코딩하지 않고 [config/](../config/)에서 관리합니다.
 
 상태기계 설계는 [docs/risk-state-machine.md](../docs/risk-state-machine.md), 통신 프로토콜은 [docs/communication.md](../docs/communication.md) 참고.
 
