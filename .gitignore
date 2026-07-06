@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# 모델 가중치 (Git LFS 또는 릴리스로 관리)
+*.pt
+*.onnx
+*.tflite
+*.bin
+
+# 센서 로그·캡처 데이터
+logs/
+*.log
+*.csv
+data/raw/
+
+# ESP32 / PlatformIO
+esp32/.pio/
+esp32/build/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

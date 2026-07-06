@@ -1,0 +1,4 @@
+# Pi 4 의존성 — MVP 진행하며 버전 확정
+numpy
+opencv-python
+pyserial
