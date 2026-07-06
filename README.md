@@ -13,27 +13,27 @@
 ```mermaid
 flowchart LR
     subgraph Sensors[센서 계층]
-        SPS30[SPS30<br/>미세입자]
-        MLX[MLX90640<br/>열화상]
-        CAM[V4L2 카메라<br/>영상]
-        MIC[ReSpeaker Lite<br/>2-Mic 음성]
+        SPS30[SPS30 미세입자]
+        MLX[MLX90640 열화상]
+        CAM[V4L2 카메라]
+        MIC[ReSpeaker Lite 2-Mic]
     end
 
-    subgraph PiZero[Raspberry Pi Zero<br/>센서 게이트웨이]
-        GW[SPS30 수집<br/>+ Pi 4 감시 Watchdog]
+    subgraph PiZero[Pi Zero — 센서 게이트웨이]
+        GW[SPS30 수집 + Pi 4 감시 Watchdog]
     end
 
-    subgraph Pi4[Raspberry Pi 4<br/>고수준 판단 노드]
+    subgraph Pi4[Pi 4 — 고수준 판단 노드]
         SMOKE[SmokeScore]
         HEAT[HeatScore]
         PRESENCE[사용자 존재 판단]
         PET[반려동물·물체 탐지]
         VOICE[제한 명령어 인식]
-        FSM[위험도 상태기계<br/>LOW→MEDIUM→HIGH→CRITICAL]
+        FSM[위험도 상태기계<br/>LOW → CRITICAL]
     end
 
-    subgraph ESP32[ESP32<br/>액추에이터 MCU]
-        ACT[후드 팬 PWM · 인덕션 차단 시뮬레이션<br/>잠금 LED · 부저 · Fail-safe]
+    subgraph ESP[ESP32 — 액추에이터 MCU]
+        ACT[팬 PWM · 인덕션 차단<br/>잠금 LED · 부저 · Fail-safe]
     end
 
     SPS30 --> GW --> SMOKE
@@ -42,7 +42,7 @@ flowchart LR
     CAM --> PET
     MIC --> VOICE
     SMOKE & HEAT & PRESENCE & PET & VOICE --> FSM
-    FSM -->|UART/Serial 제어 명령| ACT
+    FSM -->|UART 제어 명령| ACT
 ```
 
 Pi 4의 **고수준 판단**과 ESP32의 **최종 동작 집행**을 분리하여, 판단 노드가 멈추더라도 ESP32와 Pi Zero가 fail-safe 상태로 전환하는 안전 제어 구조를 갖습니다.
