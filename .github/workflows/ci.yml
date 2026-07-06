@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    name: Python 린트 + config 검증
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: 의존성 설치
+        run: pip install -r requirements-dev.txt
+      - name: ruff (Python 린트)
+        run: ruff check .
+      - name: config YAML 문법 검증
+        run: |
+          python -c "
+          import glob, yaml
+          files = glob.glob('config/*.yaml')
+          for f in files:
+              yaml.safe_load(open(f))
+          print(f'[yaml] OK — {len(files)}개 파일')
+          "
+
+  consistency:
+    name: 프로토콜 동기화 + 문서 링크 검사
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: protocol.py ↔ protocol.h 상수 일치 검사
+        run: python scripts/check_protocol_sync.py
+      - name: 마크다운 상대 링크 검사
+        run: python scripts/check_links.py
+
+  unit-tests:
+    name: Python 단위 테스트
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: 의존성 설치
+        run: pip install -r requirements-dev.txt
+      - name: pytest (tests/unit)
+        # 테스트가 아직 없으면 스킵 — MVP 1부터 실 테스트가 추가된다
+        run: |
+          if find tests/unit -name 'test_*.py' | grep -q .; then
+            pytest tests/unit -q
+          else
+            echo "테스트 파일 없음 — 스킵 (MVP 1부터 추가 예정)"
+          fi
+
+  # ESP32 펌웨어 빌드 검증 — esp32/platformio.ini 생성(MVP 1) 후 활성화
+  # esp32-build:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-python@v5
+  #       with: { python-version: "3.11" }
+  #     - run: pip install platformio
+  #     - run: pio run -d esp32
+  #     - run: pio test -d esp32 --without-uploading

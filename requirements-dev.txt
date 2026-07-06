@@ -1,0 +1,5 @@
+# 개발·CI 공용 도구 (노드 실행 의존성은 pi4/, pizero/의 requirements.txt)
+ruff
+pytest
+pyyaml
+pre-commit
