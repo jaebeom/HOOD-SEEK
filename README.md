@@ -77,6 +77,8 @@ HOOD-SEEK/
 │   ├── src/            #   팬 PWM, 인덕션 차단 시뮬레이션, LED, 부저, fail-safe
 │   ├── include/
 │   └── test/           #   펌웨어 단위 테스트 (PlatformIO)
+├── shared/
+│   └── protocol/       # 노드 간 UART 패킷 규격 단일 소스 (protocol.py + protocol.h)
 ├── config/             # 판단 임계값·제어 정책 (매월 측정 결과로 보정)
 ├── models/             # 경량 온디바이스 모델
 │   ├── weights/        #   가중치 배치 위치 (릴리스로 배포, git 미커밋)

@@ -6,7 +6,7 @@
 
 | 디렉토리 | 담당 기능 |
 |---|---|
-| `sps30/` | SPS30 PM1.0/2.5/4/10 수집·로그화, Pi 4로 전달 (Serial/UART) |
+| `sps30/` | SPS30 PM1.0/2.5/4/10 수집·로그화, Pi 4로 전달 (Serial/UART — 패킷 규격은 [shared/protocol/](../shared/protocol/) 참조) |
 | `watchdog/` | Pi 4 heartbeat 감시 — 정지·단절 감지 시 fail-safe 전환 트리거 |
 
 ## 배치 주의사항

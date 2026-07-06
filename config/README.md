@@ -10,8 +10,16 @@
 
 ## 파일
 
-| 파일 | 내용 |
-|---|---|
-| `thresholds.example.yaml` | 임계값 스키마 예시 (실측 전 초기값). 실사용 시 `thresholds.yaml`로 복사 후 보정 |
+| 파일 | 버전 관리 | 내용 |
+|---|---|---|
+| `thresholds.example.yaml` | O | 임계값 스키마 예시 (실측 전 초기값) |
+| `thresholds.yaml` | O | 팀 공식 보정본 — 매월 보정 이력이 커밋 히스토리로 남음 |
+| `thresholds.local.yaml` | X (gitignore) | 개인 실험·로컬 환경용 오버라이드 |
 
-`thresholds.yaml`(실측 보정본)도 이 디렉토리에서 함께 버전 관리합니다.
+## 로드 우선순위
+
+```
+thresholds.local.yaml > thresholds.yaml > thresholds.example.yaml
+```
+
+개인 주방·실험실 환경에 맞춘 값은 `thresholds.local.yaml`에만 적어 팀원 간 Git 충돌을 방지합니다. 실측 검증을 거쳐 팀 공식값으로 확정된 것만 `thresholds.yaml`에 반영해 커밋합니다.

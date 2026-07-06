@@ -6,10 +6,11 @@ venv/
 *.egg-info/
 
 # 모델 가중치 — 저장소에 커밋하지 않고 릴리스로 배포 (models/README.md)
-models/**/*.pt
-models/**/*.onnx
-models/**/*.tflite
-models/**/*.bin
+models/weights/*
+!models/weights/.gitkeep
+
+# 개인 실험용 임계값 오버라이드 (config/README.md 로드 우선순위 참고)
+config/*.local.yaml
 
 # 센서 로그·캡처 데이터 (보정용 기준 로그는 config/ 워크플로에 따라 별도 관리)
 logs/
