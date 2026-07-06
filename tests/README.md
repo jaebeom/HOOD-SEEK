@@ -10,4 +10,14 @@
 | TS-4 | 비조리 중 반려동물 접근 제한 | `pi4/vision`, `esp32` |
 | TS-5 | 음성 명령 및 안전 우선순위 검증 | `pi4/voice`, `pi4/fusion` |
 
-단위 테스트는 각 모듈 옆에, 시나리오(통합) 테스트는 여기에 둡니다. 센서 로그 재생(`scripts/replay_log.py`) 기반으로 실기기 없이도 판단 로직을 검증할 수 있게 구성할 예정입니다.
+## 구조
+
+| 디렉토리 | 내용 |
+|---|---|
+| `unit/pi4/` | 판단 모듈 단위 테스트 (SmokeScore·HeatScore 계산, 상태기계 전이, 히스테리시스) |
+| `unit/pizero/` | 게이트웨이 단위 테스트 (SPS30 파싱, watchdog timeout 판정) |
+| `integration/` | TS-1 ~ TS-5 시나리오 매핑 통합 테스트 |
+
+ESP32 펌웨어 단위 테스트(PWM 제어, 명령 거부, fail-safe 진입)는 PlatformIO 관례에 따라 [`esp32/test/`](../esp32/test/)에 둡니다.
+
+통합 테스트는 센서 로그 재생(`scripts/replay_log.py`) 기반으로 실기기 없이도 판단 로직을 검증할 수 있게 구성할 예정입니다.

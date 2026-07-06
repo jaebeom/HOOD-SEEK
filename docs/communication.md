@@ -17,22 +17,59 @@
 | ReSpeaker Lite ↔ Pi 4 | USB | 센서 → Pi 4 | 2-Mic 오디오 |
 | Pi 4 ↔ ESP32 | UART | 양방향 | 위험도·제어 명령 ↓ / ACK·상태 ↑ |
 
-## 메시지 설계 (초안)
+## 프레임 구조 (모든 UART 링크 공통 골격)
 
-Pi 4 → ESP32 제어 명령에 포함되어야 할 필드:
+Pi Zero ↔ Pi 4, Pi 4 ↔ ESP32의 시리얼 메시지는 아래 공통 프레임을 사용합니다.
+
+| 필드 | 크기 | 설명 |
+|---|---|---|
+| `SOF` | 1B | 프레임 시작 마커 (값 TBD, 예: `0xAA`) |
+| `TYPE` | 1B | 메시지 타입 (아래 표) |
+| `SEQ` | 1B | 시퀀스 번호 — 중복/유실 감지, 응답 매칭 |
+| `LEN` | 1B | Payload 길이 |
+| `PAYLOAD` | LEN | 메시지별 데이터 |
+| `CRC` | 2B | CRC-16 무결성 검증 (다항식 TBD) |
+
+> **TBD 항목**(baud rate, SOF 값, CRC 다항식, Payload 바이트 오프셋)은 MVP 1(수동 제어 루프) HW bring-up에서 실측 후 확정하고 이 문서를 갱신한다.
+
+## 메시지 타입
+
+### Pi Zero → Pi 4
+
+| TYPE | 이름 | Payload |
+|---|---|---|
+| `0x01` | `PM_DATA` | PM1.0 / PM2.5 / PM4 / PM10 측정값 + 측정 시각 |
+| `0x02` | `GW_STATUS` | Pi Zero 상태, SPS30 오류 플래그 |
+
+### Pi 4 → Pi Zero
+
+| TYPE | 이름 | Payload |
+|---|---|---|
+| `0x10` | `HEARTBEAT` | Pi 4 상태 요약 (watchdog 감시 대상) |
+
+### Pi 4 → ESP32
+
+| TYPE | 이름 | Payload |
+|---|---|---|
+| `0x20` | `CONTROL` | 아래 제어 필드 |
+| `0x21` | `HEARTBEAT` | (없음) — timeout 갱신용 |
+
+`CONTROL` Payload 필드:
 
 | 필드 | 설명 |
 |---|---|
-| `seq` | 시퀀스 번호 (중복/유실 감지) |
 | `risk_level` | LOW / MEDIUM / HIGH / CRITICAL |
 | `hood_level` | 후드 풍량 단계 (0=정지, 1=약풍, 2=중풍, 3=강풍) |
 | `induction_cmd` | 인덕션 명령 (NORMAL / LIMIT / CUTOFF / LOCK) |
 | `alert` | 부저·LED 경고 플래그 |
-| `checksum` | 무결성 검증 |
 
-ESP32 → Pi 4 응답: `seq` 에코 + 현재 액추에이터 상태 + 자체 fail-safe 상태.
+### ESP32 → Pi 4
 
-> 상세 프레임 포맷(바이트 레이아웃, baud rate, CRC 방식)은 MVP 1(수동 제어 루프) 구현 시 확정한다.
+| TYPE | 이름 | Payload |
+|---|---|---|
+| `0x30` | `ACK_STATUS` | 수신 `SEQ` 에코 + 현재 액추에이터 상태 + 자체 fail-safe 상태 |
+
+ESP32는 위험 상태(HIGH 이상) 또는 잠금 상태에서 `CONTROL`의 인덕션 ON/화력 증가에 해당하는 명령을 거부하고, 거부 사실을 `ACK_STATUS`에 반영합니다.
 
 ## Heartbeat / Timeout / Fail-safe
 
